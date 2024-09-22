@@ -43,14 +43,15 @@
 
     </header>
     <main class="container mt-5 mb-5">
+    
         <!-- <h3 class="text-center text-uppercase mb-3 text-primary">CẢM NHẬN VỀ BÀI HÁT</h3> -->
         <div class="row">
             <div class="col-sm">
                 <h3 class="text-center text-uppercase fw-bold">Thêm mới thể loại</h3>
-                <form action="process_add_category.php" method="post">
+                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblCatName">Tên thể loại</span>
-                        <input type="text" class="form-control" name="txtCatName" >
+                        <input type="text" class="form-control" name="txtCatName">
                     </div>
 
                     <div class="form-group  float-end ">
@@ -58,6 +59,43 @@
                         <a href="category.php" class="btn btn-warning ">Quay lại</a>
                     </div>
                 </form>
+                <?php
+include "D:\Study\TLU\Năm ba_Kì 5\Công nghệ web\TH1\btth01_template\btth01\CSE485_2023\db.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $catName = $_POST['txtCatName'];
+
+    if (!empty($catName)) {
+        // Kiểm tra xem tên thể loại đã tồn tại hay chưa
+        $kt_ten = $conn->prepare("SELECT COUNT(*) as count FROM theloai WHERE ten_tloai = ?");
+        $kt_ten->bind_param('s', $catName);
+        
+        if ($kt_ten->execute()) {
+            $kt_ten->store_result();
+            $kt_ten->bind_result($count);
+            $kt_ten->fetch();
+            
+            if ($count > 0) {
+                echo "Tên thể loại đã tồn tại. Vui lòng chọn một tên khác.";
+            } else {
+                // Thêm thể loại mới vào cơ sở dữ liệu
+                $kt_insert = $conn->prepare("INSERT INTO theloai (ten_tloai) VALUES (?)");
+                $kt_insert->bind_param('s', $catName);
+                
+                if ($kt_insert->execute()) {
+                    header("Location: category.php");
+                } else {
+                    echo "Lỗi: Không thể thêm thể loại mới.";
+                }
+            }
+        } else {
+            echo "Lỗi trong quá trình kiểm tra tên thể loại.";
+        }
+    } else {
+        echo "Vui lòng nhập tên thể loại!";
+    }
+}
+?>
             </div>
         </div>
     </main>

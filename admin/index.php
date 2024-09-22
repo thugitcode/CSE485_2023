@@ -5,11 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music for Life</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" >
     <link rel="stylesheet" href="css/style_login.css">
 </head>
 <body>
+    <?php
+    include "../db.php";
+
+    //đếm số lượng thể loại
+    $sql_theloai = "Select count(ma_tloai) as count_theloai from theloai";
+    $result_theloai = $conn ->query($sql_theloai);
+    $count_theloai = $result_theloai -> fetch_assoc()["count_theloai"];
+    
+    //đếm số lượng tác giả
+    $sql_tacgia = "Select count(ma_tgia) as count_tacgia from tacgia";
+    $result_tacgia = $conn ->query($sql_tacgia);
+    $count_tacgia = $result_tacgia -> fetch_assoc()["count_tacgia"];
+    
+    //đếm số lượng người dùng, giả sử bạn có bảng users
+    $sql_users = "select count(UserID) as count_users from users";
+    $result_users = $conn ->query($sql_users);
+    $count_users = $result_users -> fetch_assoc()["count_users"];
+
+   //đếm số lượng bài viết
+    $sql_baiviet = "select count(ma_bviet) as count_baiviet from baiviet";
+    $result_baiviet = $conn ->query($sql_baiviet);
+    $count_baiviet = $result_baiviet -> fetch_assoc()["count_baiviet"];
+
+
+
+    ?>
+
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary shadow p-3 bg-white rounded">
             <div class="container-fluid">
@@ -53,7 +80,7 @@
                         </h5>
 
                         <h5 class="h1 text-center">
-                            110
+                        <?php echo $count_users; ?>
                         </h5>
                     </div>
                 </div>
@@ -67,7 +94,7 @@
                         </h5>
 
                         <h5 class="h1 text-center">
-                            10
+                        <?php echo $count_theloai; ?>
                         </h5>
                     </div>
                 </div>
@@ -81,7 +108,7 @@
                         </h5>
 
                         <h5 class="h1 text-center">
-                            20
+                        <?php echo $count_tacgia; ?>
                         </h5>
                     </div>
                 </div>
@@ -95,7 +122,7 @@
                         </h5>
 
                         <h5 class="h1 text-center">
-                            110
+                        <?php echo $count_baiviet; ?>
                         </h5>
                     </div>
                 </div>
