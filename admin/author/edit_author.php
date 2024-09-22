@@ -45,7 +45,7 @@
     <main class="container mt-5 mb-5">
 
     <?php
-            include "D:\Study\TLU\Năm ba_Kì 5\Công nghệ web\TH1\btth01_template\btth01\CSE485_2023\db.php";
+            include "../db.php";
             
             //lấy ra ma_tgia và ten_tgia để hiển thị đúng khi bấm sửa
             if (isset($_GET['id'])) {
