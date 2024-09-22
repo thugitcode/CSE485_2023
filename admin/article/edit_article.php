@@ -121,7 +121,7 @@
 
                     <div class="form-group  float-end ">
                         <button  name = "btnEdit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu </button>
-                        <a href="article.php" class="btn btn-warning "></a>
+                        <a href="article.php" class="btn btn-warning ">Quay lại</a>
                     </div>
                 </form>
             </div>
