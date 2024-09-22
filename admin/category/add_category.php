@@ -60,7 +60,7 @@
                     </div>
                 </form>
                 <?php
-            include "D:\Study\TLU\Năm ba_Kì 5\Công nghệ web\TH1\btth01_template\btth01\CSE485_2023\db.php";
+            include "../db.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $catName = $_POST['txtCatName'];
