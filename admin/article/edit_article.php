@@ -71,7 +71,7 @@
     <main class="container mt-5 mb-5">
         <div class="row">
             <div class="col-sm">
-                <h3 class="text-center text-uppercase fw-bold">Thêm mới bài viết</h3>
+                <h3 class="text-center text-uppercase fw-bold">Chỉnh sửa bài viết</h3>
                 <form method="post" enctype="multipart/form-data">
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblma_bai_viet">Mã bài viết</span>
