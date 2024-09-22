@@ -11,7 +11,7 @@
 </head>
 <body>
     <?php 
-        include 'CC:\xampp\htdocs\vd\CSE485_2023\db.php';
+        include 'C:\xampp\htdocs\vd\CSE485_2023\db.php';
 
         $sql_article = "SELECT ma_bviet, tieude, ten_bhat, theloai.ten_tloai, tomtat, tacgia.ten_tgia, ngayviet 
                         FROM baiviet
@@ -28,8 +28,6 @@
             $noidung = $_POST['txt_noidung'];
             $ten_tgia = $_POST['txt_ten_tgia'];
             $ngayviet = $_POST['txt_ngayviet'];
-            
-
 
             $sql = "INSERT INTO baiviet(tieude, ten_bhat, ma_tloai, tomtat, noidung, ma_tgia, ngayviet)
                     VALUES ('$tieude', '$ten_bhat', '$ten_tloai', '$tomtat', '$noidung', '$ten_tgia', '$ngayviet')";
@@ -128,10 +126,7 @@
                         <span class="input-group-text" id="lblngay_viet">Ngày viết:</span>
                         <input type="date" class="form-control" name="txt_ngayviet" required> <br>
                     </div>
-                    
-
                     <div class="form-group  float-end ">
-                        
                         <button name="btnSave" class="btn btn-primary"><i class="fas fa-save"></i> Thêm </button>
                         <a href="article.php" class="btn btn-warning ">Quay lại</a>
                     </div>

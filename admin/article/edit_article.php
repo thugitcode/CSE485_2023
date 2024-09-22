@@ -28,7 +28,7 @@
                         WHERE ma_bviet = $ma_bviet
                         ORDER BY ma_bviet";
         $result_article = $conn->query($sql_article);
-        $article_suppliersRow = mysqli_fetch_array($result_article, MYSQLI_ASSOC); // 1 record
+        $article_suppliersRow = mysqli_fetch_array($result_article, MYSQLI_ASSOC); 
         
         // Nếu không tìm thấy dữ liệu -> thông báo lỗi
         if(empty($article_suppliersRow)) {
@@ -87,7 +87,7 @@
                     </div>
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblthe_loai">Thể loại:</span>
-                        <select class="form-select" id="the_loai" name="txt_ten_tloai" value = "<?php echo $article_suppliersRow['ten_tloai'] ?>"required>
+                        <select class="form-select" id="the_loai" name="txt_ma_tloai" value = "<?php echo $article_suppliersRow['ten_tloai'] ?>"required>
                             <?php 
                                 $sql_category = "SELECT ma_tloai, ten_tloai FROM theloai";
                                 $result_category = $conn->query($sql_category);
@@ -99,12 +99,12 @@
                     </div>
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lbltom_tat">Tóm tắt</span>
-                        <input type="text" class="form-control" name="txt_tomtat" value = "<?php echo $article_suppliersRow['tomtat'] ?>"> <br>
+                        <input type="text" class="form-control" name="txt_tomtat" value = "<?php echo $article_suppliersRow['tomtat'] ?>" required> <br>
                     </div>
                     
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lbltac_gia">Tác giả:</span>
-                        <select class="form-select" id="tac_gia" name="txt_ten_tgia" value = "<?php echo $article_suppliersRow['ten_tgia'] ?>" required>
+                        <select class="form-select" id="tac_gia" name="txt_ma_tgia" value = "<?php echo $article_suppliersRow['ten_tgia'] ?>" required>
                         <?php 
                                 $sql_author = "SELECT ma_tgia, ten_tgia FROM tacgia";
                                 $result_author = $conn->query($sql_author);
@@ -120,8 +120,8 @@
                     </div>
 
                     <div class="form-group  float-end ">
-                        <button name= "btnEdit" class="btn btn-success"><i class="fas fa-save"></i> Sửa </button>
-                        <a href="article.php" class="btn btn-warning ">Quay lại</a>
+                        <button  name = "btnEdit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu </button>
+                        <a href="article.php" class="btn btn-warning "></a>
                     </div>
                 </form>
             </div>
@@ -131,20 +131,20 @@
         <h4 class="text-center text-uppercase fw-bold">TLU's music garden</h4>
     </footer>
     <?php
-    // 4. Nếu người dùng có bấm nút Đăng ký thì thực thi câu lệnh UPDATE
+    
     if (isset($_POST['btnEdit'])) {
         // Lấy dữ liệu người dùng hiệu chỉnh gởi từ REQUEST POST
         $ma_bviet = $_POST['txt_ma_bviet'];
-        $tieude = $_POST['txt_tieude']; // Check if key exists, then get value
+        $tieude = $_POST['txt_tieude']; 
         $ten_bhat = $_POST['txt_ten_bhat'];
-        $ten_tloai = $_POST['txt_ten_tloai'];
+        $ma_tloai = $_POST['txt_ma_tloai'];
         $tomtat = $_POST['txt_tomtat'];
-        $ten_tgia = $_POST['txt_ten_tgia'];
+        $ma_tgia = $_POST['txt_ma_tgia'];
         $ngayviet = $_POST['txt_ngayviet'];
         
         // Câu lệnh UPDATE
         $sql = "UPDATE baiviet 
-                SET ma_bviet = '$ma_bviet', tieude = '$tieude', ten_bhat = '$ten_bhat', ten_tloai = '$ten_tloai', tomtat = '$tomtat', ten_tgia = '$ten_tgia', ngayviet = '$ngayviet'
+                SET ma_bviet = '$ma_bviet', tieude = '$tieude', ten_bhat = '$ten_bhat', ma_tloai = '$ma_tloai', tomtat = '$tomtat', ma_tgia = '$ma_tgia', ngayviet = '$ngayviet'
                 WHERE ma_bviet = $ma_bviet;";
 
         // Thực thi UPDATE
@@ -155,8 +155,13 @@
         mysqli_close($conn);
 
         // Sau khi cập nhật dữ liệu, tự động điều hướng về trang Danh sách
-        header('location:article.php');
-        //header('location:article.php');
+        if ($conn->query($sql) === TRUE) {
+        
+       
+        // Redirect to the article page after successful update
+            header('Location: article.php');
+            exit();
+        } 
         
     }
     ?>
