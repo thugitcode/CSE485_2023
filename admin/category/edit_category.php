@@ -14,15 +14,15 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary shadow p-3 bg-white rounded">
             <div class="container-fluid">
                 <div class="h3">
-                    <a class="navbar-brand" href="#">Administration</a>
+                    <a class="navbar-brand" href="../home.php">Administration</a>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="./">Trang chủ</a>
+                <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../home.php">Trang chủ</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php">Trang ngoài</a>
@@ -31,10 +31,10 @@
                         <a class="nav-link active fw-bold" href="category.php">Thể loại</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="author.php">Tác giả</a>
+                        <a class="nav-link" href="../author/author.php">Tác giả</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="article.php">Bài viết</a>
+                        <a class="nav-link" href="../article/article.php">Bài viết</a>
                     </li>
                 </ul>
                 </div>
@@ -49,15 +49,15 @@
             
             //lấy ra ma_tloai và ten_tloai để hiển thị đúng khi bấm sửa
             if (isset($_GET['id'])) {
-                $category_id = $_GET['id'];
+                $author_id = $_GET['id'];
             
-                $sql = "SELECT ma_tloai, ten_tloai FROM theloai WHERE ma_tloai = $category_id";
+                $sql = "SELECT ma_tloai, ten_tloai FROM theloai WHERE ma_tloai = $author_id";
                 $result = $conn->query($sql);
             
                 if ($result->num_rows == 1) {
                     $row = $result->fetch_assoc();
-                    $category_id = $row['ma_tloai'];
-                    $category_name = $row['ten_tloai'];
+                    $author_id = $row['ma_tloai'];
+                    $author_name = $row['ten_tloai'];
                 }}
 
                 // bắt đầu sửa
@@ -86,12 +86,12 @@
                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblCatId">Mã thể loại</span>
-                        <input type="text" class="form-control" name="txtCatId" readonly value="<?php echo $category_id; ?>">
+                        <input type="text" class="form-control" name="txtCatId" readonly value="<?php echo $author_id; ?>">
                     </div>
 
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblCatName">Tên thể loại</span>
-                        <input type="text" class="form-control" name="txtCatName" value = "<?php echo $category_name; ?>">
+                        <input type="text" class="form-control" name="txtCatName" value = "<?php echo $author_name; ?>">
                     </div>
 
                     <div class="form-group  float-end ">
