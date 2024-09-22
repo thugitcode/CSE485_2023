@@ -11,7 +11,7 @@
 </head>
 <body>
     <?php 
-        include 'D:\Study\TLU\Năm ba_Kì 5\Công nghệ web\TH1\btth01_template\btth01\CSE485_2023\db.php';
+        include '../db.php';
 
         $sql_article = "SELECT ma_bviet, tieude, ten_bhat, theloai.ten_tloai, tomtat, tacgia.ten_tgia, ngayviet 
                         FROM baiviet
