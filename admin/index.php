@@ -11,7 +11,7 @@
 </head>
 <body>
     <?php
-    include "../db.php";
+    include "./db.php";
 
     //đếm số lượng thể loại
     $sql_theloai = "Select count(ma_tloai) as count_theloai from theloai";
