@@ -1,3 +1,11 @@
+<?php
+include 'db.php';
+
+$sql = "SELECT * FROM tacgia";
+$result = $conn->query($sql);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

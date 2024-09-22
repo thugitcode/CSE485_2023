@@ -1,3 +1,33 @@
+<?php
+include 'db.php';
+
+if (isset($_POST['submit'])) {
+    $ten_tgia = $_POST['ten_tgia'];
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["photo"]["name"]);
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    // Kiểm tra file hình ảnh
+    $check = getimagesize($_FILES["photo"]["tmp_name"]);
+    if ($check !== false) {
+        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            $sql = "INSERT INTO tacgia (ten_tgia, hinh_tgia) VALUES ('$ten_tgia', '$target_file')";
+            if ($conn->query($sql) === TRUE) {
+                echo "Thêm tác giả thành công.";
+            } else {
+                echo "Lỗi: " . $sql . "<br>" . $conn->error;
+            }
+        } else {
+            echo "Đã xảy ra lỗi khi tải lên file.";
+        }
+    } else {
+        echo "File không phải là hình ảnh.";
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,7 +88,6 @@
                     </div>
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblPhoto">Ảnh đại diện</span>
-                        <img src="path/to/your/image.jpg" alt="Ảnh đại diện" class="author-photo ms-3">
                         <input type="file" class="form-control" name="photo" required>
                         
                     </div>

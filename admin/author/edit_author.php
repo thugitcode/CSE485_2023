@@ -1,3 +1,55 @@
+<?php
+include 'db.php';
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $sql = "SELECT * FROM tacgia WHERE ma_tgia = $id";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+    } else {
+        echo "Không tìm thấy tác giả.";
+        exit;
+    }
+} else {
+    echo "ID không hợp lệ.";
+    exit;
+}
+
+if (isset($_POST['submit'])) {
+    $ten_tgia = $_POST['ten_tgia'];
+    $target_file = $row['hinh_tgia'];
+
+    if (!empty($_FILES["photo"]["name"])) {
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($_FILES["photo"]["name"]);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        // Kiểm tra file hình ảnh
+        $check = getimagesize($_FILES["photo"]["tmp_name"]);
+        if ($check !== false) {
+            if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+                echo "Đã xảy ra lỗi khi tải lên file.";
+                exit;
+            }
+        } else {
+            echo "File không phải là hình ảnh.";
+            exit;
+        }
+    }
+
+    $sql = "UPDATE tacgia SET ten_tgia='$ten_tgia', hinh_tgia='$target_file' WHERE ma_tgia=$id";
+    if ($conn->query($sql) === TRUE) {
+        echo "Cập nhật tác giả thành công.";
+    } else {
+        echo "Lỗi: " . $sql . "<br>" . $conn->error;
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +112,8 @@
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblPhoto">Ảnh đại diện</span>
                         <input type="file" class="form-control" name="photo" required>
-                        <img src="path/to/your/image.jpg" alt="Ảnh đại diện" class="author-photo ms-3">
+                        <img src="img/nhacvietplus.jpg" alt="Ảnh đại diện" class="author-photo ms-3"  style='width: 100px;height:auto;margin: left 10px;'>
+                        
                     </div>
                     <div class="form-group  float-end ">
                         <input type="submit" value="Lưu lại" class="btn btn-success">
