@@ -59,7 +59,7 @@
 
                     <tbody>
                     <?php 
-                        include "D:\Study\TLU\Năm ba_Kì 5\Công nghệ web\TH1\btth01_template\btth01\CSE485_2023\db.php";
+                        include "../db.php";
                         $sql = "SELECT ma_tloai, ten_tloai FROM theloai";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
