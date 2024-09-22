@@ -1,6 +1,6 @@
 <?php
 // Kết nối đến cơ sở dữ liệu
-include 'D:\Study\TLU\Năm ba_Kì 5\Công nghệ web\TH1\btth01_template\btth01\CSE485_2023\db.php';
+include '../db.php';
 
 // Kiểm tra xem có tham số id được truyền qua phương thức GET không
 if(isset($_GET['id'])) {
