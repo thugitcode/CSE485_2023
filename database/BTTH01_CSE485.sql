@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 20, 2024 at 03:42 AM
+-- Generation Time: Sep 22, 2024 at 01:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `btth01_cse485`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_DSBaiViet` (IN `TenTheLoai` VARCHAR(100))   BEGIN
+    DECLARE exists_count INT;
+
+    SELECT COUNT(*) INTO exists_count FROM theloai WHERE ten_tloai = TenTheLoai;
+
+    IF exists_count > 0 THEN
+        SELECT bv.ma_bviet, bv.tieude, bv.ten_bhat, tl.ten_tloai, tg.ten_tgia
+        FROM baiviet bv
+        JOIN theloai tl ON bv.ma_tloai = tl.ma_tloai
+        JOIN tacgia tg ON bv.ma_tgia = tg.ma_tgia
+        WHERE tl.ten_tloai = TenTheLoai;
+    ELSE
+        SELECT 'Thể loại không tồn tại.' AS message;
+    END IF;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -56,7 +78,43 @@ INSERT INTO `baiviet` (`ma_bviet`, `tieude`, `ten_bhat`, `ma_tloai`, `tomtat`, `
 (10, 'I\'m stronger', 'I\'m stronger', 7, 'Em không phải là người giỏi giấu cảm xúc, nhưng em lại là người giỏi đoán biết cảm xúc của người khác vậy nên đừng cố nói nhớ em, rằng mọi thứ chỉ là do hoàn cảnh. Và cũng đừng dối em rằng anh đã từng yêu em. Em nhắm mắt cũng cảm nhận được mà, thật đấy', NULL, 2, '2013-08-21 00:00:00', NULL),
 (11, 'Ôi Cuộc Sống Mến Thương', 'Ôi Cuộc Sống Mến Thương', 5, 'Có một câu nói như thế này \"Âm nhạc là một cái gì khác lạ mà hầu như tôi muốn nói nó là một phép thần diệu.Vì nó đứng giữa tư tưởng và hiện tượng, tinh thần và vật chất, mọi thứ trung gian mơ hồ thế đó mà không là thế đó giữa các sự vật mà âm nhạc hòa giải\"', NULL, 2, '2011-10-09 00:00:00', NULL),
 (12, 'Cây và gió', 'Cây và gió', 7, 'Em và anh, hai đứa quen nhau thật tình cờ. Lời hát của anh từ bài hát “Cây và gió” đã làm tâm hồn em xao động. Nhưng sự thật phũ phàng rằng em chưa bao giờ nói cho anh biết những suy nghĩ tận sâu trong tim mình. Bởi vì em nhút nhát, em không dám đối mặt với thực tế khắc nghiệt, hay thực ra em không dám đối diện với chính mình.', NULL, 7, '2013-12-05 00:00:00', NULL),
-(13, 'Như một cách tạ ơn đời', 'Người thầy', 2, 'Ánh nắng cuối ngày rồi cũng sẽ tắt, dòng sông con đò rồi cũng sẽ rẽ sang một hướng khác. Nhưng việc trồng người luôn cảm thụ với chuyến đò ngang, cứ tần tảo đưa rồi lặng lẽ quay về đưa sang. Con đò năm xưa của Thầy nặng trĩu yêu thương, hy sinh thầm lặng.', NULL, 8, '2014-01-02 00:00:00', NULL);
+(13, 'Như một cách tạ ơn đời', 'Người thầy', 2, 'Ánh nắng cuối ngày rồi cũng sẽ tắt, dòng sông con đò rồi cũng sẽ rẽ sang một hướng khác. Nhưng việc trồng người luôn cảm thụ với chuyến đò ngang, cứ tần tảo đưa rồi lặng lẽ quay về đưa sang. Con đò năm xưa của Thầy nặng trĩu yêu thương, hy sinh thầm lặng.', NULL, 8, '2014-01-02 00:00:00', NULL),
+(15, 'Solo', 'Solo', 9, 'Solo là single song đầu tiên, đánh dấu debut solo của Jennie Kim', 'tóm lại là hay', 1, '2024-09-22 00:00:00', NULL),
+(16, 'Rose', 'On the ground', 1, 'Solo là single song đầu tiên, đánh dấu debut solo của Jennie Kim', 'tóm lại là hay', 1, '2024-09-22 00:00:00', NULL);
+
+--
+-- Triggers `baiviet`
+--
+DELIMITER $$
+CREATE TRIGGER `tg_CapNhatTheLoai` AFTER INSERT ON `baiviet` FOR EACH ROW BEGIN
+    UPDATE theloai
+    SET SLBaiViet = SLBaiViet + 1
+    WHERE ma_tloai = NEW.ma_tloai;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tg_CapNhatTheLoai_AfterUpdate` AFTER UPDATE ON `baiviet` FOR EACH ROW BEGIN
+    IF OLD.ma_tloai <> NEW.ma_tloai THEN
+        UPDATE theloai
+        SET SLBaiViet = SLBaiViet - 1
+        WHERE ma_tloai = OLD.ma_tloai;
+
+        UPDATE theloai
+        SET SLBaiViet = SLBaiViet + 1
+        WHERE ma_tloai = NEW.ma_tloai;
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tg_CapNhatTheLoai_Delete` AFTER DELETE ON `baiviet` FOR EACH ROW BEGIN
+    UPDATE theloai
+    SET SLBaiViet = SLBaiViet - 1
+    WHERE ma_tloai = OLD.ma_tloai;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -82,7 +140,9 @@ INSERT INTO `tacgia` (`ma_tgia`, `ten_tgia`, `hinh_tgia`) VALUES
 (5, 'Khánh Ngọc', NULL),
 (6, 'Night Stalker', NULL),
 (7, 'Phạm Phương Anh', NULL),
-(8, 'Tâm tình', NULL);
+(8, 'Tâm tình', NULL),
+(9, 'YG entertainment', NULL),
+(10, 'T1 win', NULL);
 
 -- --------------------------------------------------------
 
@@ -92,22 +152,62 @@ INSERT INTO `tacgia` (`ma_tgia`, `ten_tgia`, `hinh_tgia`) VALUES
 
 CREATE TABLE `theloai` (
   `ma_tloai` int(10) UNSIGNED NOT NULL,
-  `ten_tloai` varchar(50) NOT NULL
+  `ten_tloai` varchar(50) NOT NULL,
+  `SLBaiViet` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `theloai`
 --
 
-INSERT INTO `theloai` (`ma_tloai`, `ten_tloai`) VALUES
-(1, 'Nhạc trẻ'),
-(2, 'Nhạc trữ tình'),
-(3, 'Nhạc cách mạng'),
-(4, 'Nhạc thiếu nhi'),
-(5, 'Nhạc quê hương'),
-(6, 'POP'),
-(7, 'Rock'),
-(8, 'R&B');
+INSERT INTO `theloai` (`ma_tloai`, `ten_tloai`, `SLBaiViet`) VALUES
+(1, 'Nhạc trẻ', 2),
+(2, 'Nhạc trữ tình', 4),
+(3, 'Nhạc cách mạng', 0),
+(4, 'Nhạc thiếu nhi', 0),
+(5, 'Nhạc quê hương', 3),
+(6, 'POP', 0),
+(7, 'Rock', 4),
+(8, 'R&B', 1),
+(9, 'Nhạc kpop', 1),
+(10, 'Nhạc US', 0),
+(11, 'Nhạc Indi', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `UserID` int(11) NOT NULL,
+  `Username` varchar(50) NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  `Role` enum('admin','user') DEFAULT 'user'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vw_music`
+-- (See below for the actual view)
+--
+CREATE TABLE `vw_music` (
+`ma_bviet` int(10) unsigned
+,`tieude` varchar(200)
+,`ten_bhat` varchar(100)
+,`ten_tloai` varchar(50)
+,`ten_tgia` varchar(100)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vw_music`
+--
+DROP TABLE IF EXISTS `vw_music`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_music`  AS SELECT `baiviet`.`ma_bviet` AS `ma_bviet`, `baiviet`.`tieude` AS `tieude`, `baiviet`.`ten_bhat` AS `ten_bhat`, `theloai`.`ten_tloai` AS `ten_tloai`, `tacgia`.`ten_tgia` AS `ten_tgia` FROM ((`baiviet` join `tacgia` on(`tacgia`.`ma_tgia` = `baiviet`.`ma_tgia`)) join `theloai` on(`theloai`.`ma_tloai` = `baiviet`.`ma_tloai`)) ;
 
 --
 -- Indexes for dumped tables
@@ -132,6 +232,41 @@ ALTER TABLE `tacgia`
 --
 ALTER TABLE `theloai`
   ADD PRIMARY KEY (`ma_tloai`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`UserID`),
+  ADD UNIQUE KEY `Username` (`Username`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `baiviet`
+--
+ALTER TABLE `baiviet`
+  MODIFY `ma_bviet` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `tacgia`
+--
+ALTER TABLE `tacgia`
+  MODIFY `ma_tgia` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `theloai`
+--
+ALTER TABLE `theloai`
+  MODIFY `ma_tloai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
